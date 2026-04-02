@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software Architecture — Study Guide</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#111;--bg2:#1a1a1a;--bg3:#222;--bg4:#2a2a2a;
+  --tx:#ccc;--tx2:#999;--tx3:#666;
+  --bd:#333;--bd2:#444;
+  --accent:#888;
+  --font:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;
+  --sans:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  --max:780px;
+  --nav-w:280px;
+  --transition:0.2s ease;
+}
+[data-theme="light"]{
+  --bg:#f5f5f5;--bg2:#fff;--bg3:#eee;--bg4:#e4e4e4;
+  --tx:#222;--tx2:#555;--tx3:#888;
+  --bd:#ddd;--bd2:#ccc;
+  --accent:#666;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+html{scroll-behavior:smooth;font-size:15px}
+body{font-family:var(--sans);background:var(--bg);color:var(--tx);line-height:1.7;transition:background var(--transition),color var(--transition)}
+
+/* NAV SIDEBAR */
+.nav{position:fixed;top:0;left:0;width:var(--nav-w);height:100vh;background:var(--bg2);border-right:1px solid var(--bd);overflow-y:auto;z-index:100;transition:transform .3s ease,background var(--transition);padding:1.2rem 0}
+.nav::-webkit-scrollbar{width:4px}
+.nav::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+.nav-header{padding:0 1.2rem 1rem;border-bottom:1px solid var(--bd);margin-bottom:.6rem;display:flex;align-items:center;justify-content:space-between}
+.nav-header h2{font-family:var(--font);font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tx2);font-weight:500}
+.nav-close{display:none;background:none;border:none;color:var(--tx2);cursor:pointer;font-size:1.2rem;padding:4px}
+.nav-group{padding:.4rem 0}
+.nav-group-title{font-family:var(--font);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);padding:.5rem 1.2rem .3rem;font-weight:600}
+.nav a{display:block;padding:.32rem 1.2rem;font-size:.82rem;color:var(--tx2);text-decoration:none;transition:color .15s,background .15s;line-height:1.4}
+.nav a:hover{color:var(--tx);background:var(--bg3)}
+
+/* TOP BAR */
+.topbar{position:fixed;top:0;left:var(--nav-w);right:0;height:48px;background:var(--bg2);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;z-index:90;transition:left .3s ease,background var(--transition)}
+.menu-btn{display:none;background:none;border:none;color:var(--tx2);cursor:pointer;font-size:1.1rem;padding:4px 8px}
+.topbar-right{display:flex;align-items:center;gap:1rem}
+.theme-toggle{background:none;border:1px solid var(--bd);color:var(--tx2);cursor:pointer;font-family:var(--font);font-size:.72rem;padding:4px 10px;border-radius:3px;letter-spacing:.05em;transition:all var(--transition)}
+.theme-toggle:hover{color:var(--tx);border-color:var(--bd2)}
+.search-box{background:var(--bg3);border:1px solid var(--bd);color:var(--tx);font-family:var(--sans);font-size:.82rem;padding:5px 10px;border-radius:3px;width:200px;outline:none;transition:all var(--transition)}
+.search-box:focus{border-color:var(--accent)}
+.search-box::placeholder{color:var(--tx3)}
+
+/* MAIN */
+.main{margin-left:var(--nav-w);padding:48px 0 0;transition:margin-left .3s ease}
+.content{max-width:var(--max);margin:0 auto;padding:2.5rem 2rem 6rem}
+
+/* SECTIONS */
+.lecture{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--bd)}
+.lecture:last-child{border-bottom:none}
+.lecture-tag{font-family:var(--font);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin-bottom:.3rem;font-weight:500}
+.lecture h2{font-family:var(--sans);font-size:1.35rem;font-weight:600;color:var(--tx);margin-bottom:.3rem;line-height:1.3}
+.lecture-subtitle{font-size:.88rem;color:var(--tx2);margin-bottom:1.5rem;font-style:italic}
+
+/* SECTIONS WITHIN LECTURES */
+.section{margin-bottom:2rem}
+.section h3{font-family:var(--sans);font-size:1.05rem;font-weight:600;color:var(--tx);margin-bottom:.6rem;padding-bottom:.3rem;border-bottom:1px solid var(--bd)}
+.section h4{font-size:.92rem;font-weight:600;color:var(--tx);margin:1.2rem 0 .4rem}
+.section p{margin-bottom:.7rem;color:var(--tx)}
+.section ul,.section ol{margin:.5rem 0 .8rem 1.4rem;color:var(--tx)}
+.section li{margin-bottom:.3rem;line-height:1.6}
+
+/* CALLOUT BOXES */
+.callout{background:var(--bg3);border-left:3px solid var(--bd2);padding:.8rem 1rem;margin:1rem 0;border-radius:0 3px 3px 0;font-size:.88rem;line-height:1.6}
+.callout.def{border-left-color:var(--accent)}
+.callout strong{font-weight:600}
+.callout-label{font-family:var(--font);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:.3rem;display:block;font-weight:600}
+
+/* TABLES */
+.tbl-wrap{overflow-x:auto;margin:1rem 0}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+th{font-family:var(--font);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;text-align:left;padding:.5rem .7rem;background:var(--bg3);border-bottom:2px solid var(--bd);color:var(--tx2);font-weight:600}
+td{padding:.5rem .7rem;border-bottom:1px solid var(--bd);color:var(--tx);vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:none}
+
+/* COLLAPSIBLE SUMMARY */
+details{margin:1rem 0}
+details summary{font-family:var(--font);font-size:.78rem;font-weight:500;color:var(--tx2);cursor:pointer;padding:.5rem .7rem;background:var(--bg3);border-radius:3px;list-style:none;display:flex;align-items:center;gap:.5rem;transition:color .15s}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:'▸';font-size:.7rem;transition:transform .2s}
+details[open] summary::before{transform:rotate(90deg)}
+details summary:hover{color:var(--tx)}
+details .details-body{padding:.8rem .7rem .5rem;font-size:.88rem}
+
+/* BACK TO TOP */
+.btt{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg3);border:1px solid var(--bd);color:var(--tx2);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;opacity:0;transition:opacity .3s,background .2s;z-index:80}
+.btt.show{opacity:1}
+.btt:hover{background:var(--bg4);color:var(--tx)}
+
+/* OVERLAY */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:95}
+
+/* PROGRESS */
+.progress{position:fixed;top:48px;left:var(--nav-w);right:0;height:2px;z-index:89;transition:left .3s ease}
+.progress-bar{height:100%;width:0%;background:var(--accent);transition:width .1s}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nav{transform:translateX(-100%)}
+  .nav.open{transform:translateX(0)}
+  .nav-close{display:block}
+  .topbar{left:0}
+  .main{margin-left:0}
+  .menu-btn{display:block}
+  .overlay.show{display:block}
+  .progress{left:0}
+  .search-box{width:140px}
+}
+@media(max-width:600px){
+  html{font-size:14px}
+  .content{padding:2rem 1.2rem 4rem}
+  .nav{width:85vw}
+  .search-box{width:110px}
+}
+
+/* PRINT */
+@media print{
+  .nav,.topbar,.btt,.progress,.overlay,.menu-btn,.theme-toggle,.search-box{display:none!important}
+  .main{margin-left:0!important}
+  .content{max-width:100%;padding:0}
+  .lecture{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeNav()"></div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-header">
+    <h2>Contents</h2>
+    <button class="nav-close" onclick="closeNav()" aria-label="Close navigation">✕</button>
+  </div>
+  <div id="nav-links"></div>
+</nav>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <button class="menu-btn" onclick="openNav()" aria-label="Open navigation">☰</button>
+  <div class="topbar-right">
+    <input type="text" class="search-box" id="search" placeholder="Search…" oninput="filterSections(this.value)">
+    <button class="theme-toggle" onclick="toggleTheme()">◑ Theme</button>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+<div class="content" id="content">
+
+<!-- INTRO -->
+<div style="margin-bottom:3rem">
+  <h1 style="font-size:1.6rem;font-weight:600;margin-bottom:.3rem">Software Architecture</h1>
+  <p style="color:var(--tx2);font-size:.92rem">Structured study notes — iSAQB CPSA-F preparation</p>
+</div>
+
+<!-- ====== LECTURE 1 ====== -->
+<div class="lecture" id="lec1" data-search="software architecture what is software complexity project goals architect role">
+<span class="lecture-tag">Lectures 1 – 9</span>
+<h2>Foundations</h2>
+<p class="lecture-subtitle">What software architecture is, why it matters, and the architect's role</p>
+
+<div class="section">
+<h3>§1–3 · What Is Software?</h3>
+<p>Software encompasses programs, source code, documentation, data, tools, procedures, and version control configurations. A <strong>software-intensive system</strong> is one where software is the major technical challenge and primary factor affecting schedule, cost, and risk.</p>
+<div class="callout def"><callout-label>Definition</callout-label>A system is a combination of interacting elements organized to achieve one or more stated purposes.</div>
+</div>
+
+<div class="section">
+<h3>§4–6 · Architecture Principles &amp; Goals</h3>
+<p>From Vitruvius: architecture must be <strong>useful</strong> (functional), <strong>stable &amp; reliable</strong> (proven solutions), and <strong>graceful</strong> (well-structured, great UX).</p>
+<p>Goals of software architecture:</p>
+<ul>
+<li>Create meaningful structure — decompose via patterns and best practices</li>
+<li>Specify key implementation details — help developers execute correctly</li>
+<li>Define rules, principles, and guidelines — conceptual integrity</li>
+<li>Document design decisions and rationale — including rejected alternatives</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>§7 · Complexity</h3>
+<div class="callout def"><callout-label>Definition</callout-label>Complexity is the human effort required to understand, change, or extend a system. Once added, it is very difficult to remove and accumulates until the system becomes impossible to change.</div>
+<p>Robert C. Martin's goal: minimize the human resources required to build and maintain the system.</p>
+</div>
+
+<div class="section">
+<h3>§8–9 · Project vs. Architecture Goals</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Project Goals (Short-Term)</th><th>Architecture Goals (Long-Term)</th></tr>
+<tr><td>Deliver features on time</td><td>Ensure long-term maintainability</td></tr>
+<tr><td>Stay within budget</td><td>Reduce complexity over time</td></tr>
+<tr><td>High quality for current release</td><td>Support extensibility &amp; understandability</td></tr>
+<tr><td>Short-term operational focus</td><td>Invest in infrastructure &amp; technology</td></tr>
+</table></div>
+<div class="callout"><callout-label>The Conflict</callout-label>Shortest time and smallest budget conflicts with long-term architecture health. Both extremes are dangerous. The architect's job is to make smart trade-offs.</div>
+</div>
+
+<div class="section">
+<h3>§10 · Defining Software Architecture</h3>
+<p>No single universal definition, but all share four elements:</p>
+<div class="tbl-wrap"><table>
+<tr><th>Element</th><th>Description</th></tr>
+<tr><td>Components / Building Blocks</td><td>Structural elements at a given level of analysis</td></tr>
+<tr><td>Relationships</td><td>Behavior, interfaces, dependencies between components</td></tr>
+<tr><td>Environment</td><td>External context in which components operate</td></tr>
+<tr><td>Principles, Rules &amp; Guidelines</td><td>System-wide design governance (often overlooked)</td></tr>
+</table></div>
+</div>
+
+<div class="section">
+<h3>§11 · Components</h3>
+<p>A component is a unit of composition and encapsulation providing static structure. Can be any size — from a function to an entire container cluster.</p>
+<div class="tbl-wrap"><table>
+<tr><th>Black Box</th><th>White Box</th></tr>
+<tr><td>Hides internals; exposes only I/O &amp; responsibilities. Reduces complexity.</td><td>Shows internal structure. Used for internal design documentation.</td></tr>
+</table></div>
+</div>
+
+<div class="section">
+<h3>§12–13 · Interfaces</h3>
+<p>An interface is a contract and shared boundary — covering syntax, functional behavior, error behavior, quality attributes, technologies/protocols, and constraints.</p>
+<div class="tbl-wrap"><table>
+<tr><th>Provided (API)</th><th>Required (SPI)</th><th>Standard</th></tr>
+<tr><td>Provider defines &amp; owns. Consumer depends on provider.</td><td>Consumer defines. Provider must conform. Dependency inverted.</td><td>Third party defines. Both conform.</td></tr>
+</table></div>
+</div>
+
+<div class="section">
+<h3>§14–18 · Stakeholders, Requirements &amp; Quality</h3>
+<p><strong>Stakeholders</strong> express concerns through requirements — the bridge between people and architecture.</p>
+<div class="tbl-wrap"><table>
+<tr><th>Functional Requirements</th><th>Quality Requirements</th></tr>
+<tr><td>WHAT the system does. Changes usually localized.</td><td>HOW the system behaves. Missing quality reqs → major redesign.</td></tr>
+</table></div>
+<h4>Key Quality Attributes</h4>
+<ul>
+<li><strong>Performance</strong> — throughput (work/time) and/or response time (latency)</li>
+<li><strong>Efficiency</strong> — work done per resource used; critical for IoT/battery devices</li>
+<li><strong>Scalability</strong> — potential to increase performance: vertical (scale up), horizontal (scale out), elastic (auto add/remove)</li>
+</ul>
+<div class="callout"><callout-label>Key Rule</callout-label>A system can be scalable without being elastic. But elastic scaling requires horizontal scalability as a prerequisite.</div>
+<h4>Constraints</h4>
+<p>Externally imposed limitations (technical, time/budget, legal/regulatory) that narrow the solution space — not always bad, as they reduce decisions the architect must make.</p>
+</div>
+
+<details>
+<summary>Quick Summary — Foundations</summary>
+<div class="details-body">
+<div class="tbl-wrap"><table>
+<tr><th>Term</th><th>Definition</th></tr>
+<tr><td>Software</td><td>Programs, documentation, tools, and data</td></tr>
+<tr><td>Software-Intensive System</td><td>System where software is the dominant technical and business risk</td></tr>
+<tr><td>Architecture Principles</td><td>Useful, Reliable, Graceful</td></tr>
+<tr><td>Complexity</td><td>Human effort to understand/change. Accumulates. Must be minimized.</td></tr>
+<tr><td>Stakeholder</td><td>Anyone who affects or is affected by the system</td></tr>
+<tr><td>Constraint</td><td>External limitation; narrows solution space</td></tr>
+</table></div>
+</div>
+</details>
+</div>
+
+<!-- ====== LECTURE 2 ====== -->
+<div class="lecture" id="lec2" data-search="tasks responsibilities architect deliverables business case requirements design technology">
+<span class="lecture-tag">Lectures 4 – 5</span>
+<h2>Tasks &amp; Responsibilities</h2>
+<p class="lecture-subtitle">The seven core tasks of a software architect</p>
+
+<div class="section">
+<h3>Task 1 — Establish the Business Case</h3>
+<p>Create economically viable solutions. Understand cost, target market, time to market, product lifetime, and integration needs. The architect contributes input, not owns it.</p>
+</div>
+
+<div class="section">
+<h3>Task 2 — Clarify &amp; Scrutinize Requirements</h3>
+<p>Guarantee fulfillment by identifying, clarifying, refining, and scrutinizing all requirements. Key sub-tasks:</p>
+<ul>
+<li><strong>Feasibility</strong> — Is it technically achievable and economically reasonable?</li>
+<li><strong>Contradictions</strong> — Detect conflicts (e.g., absolute privacy vs. law-enforcement access)</li>
+<li><strong>Implicit requirements</strong> — Make hidden expectations explicit (e.g., adaptive streaming)</li>
+<li><strong>Unstable requirements</strong> — Flag frequently changing reqs; stabilize ASAP to avoid scope creep</li>
+</ul>
+<div class="callout"><callout-label>Note</callout-label>The architect is <strong>not</strong> the requirements engineer. The architect guarantees fulfillment — not definition.</div>
+</div>
+
+<div class="section">
+<h3>Task 3 — Design or Select the Architecture</h3>
+<p>Select existing, extend current, or design from scratch — weighing cost, integration, and alignment. Technology selection: prefer proven tech, consider developer experience, evaluate landscape. Decompose into building blocks, define interfaces, address cross-cutting concerns. <strong>Document rationale</strong> for every decision. Prototype before handoff.</p>
+</div>
+
+<div class="section">
+<h3>Task 4 — Document &amp; Communicate</h3>
+<p>Create visual, illustrative presentations (diagrams, views, slide decks). Always document assumptions explicitly to prevent misunderstandings.</p>
+</div>
+
+<div class="section">
+<h3>Task 5 — Guide &amp; Support Developers</h3>
+<p>Not an ivory-tower role. Stay involved: ensure compliance, conduct code reviews, gather feedback, support tooling, analyze issues, coordinate cross-project. Learn from skilled developers.</p>
+</div>
+
+<div class="section">
+<h3>Task 6 — Evaluate the Architecture</h3>
+<p>Quantitative (metrics for performance, scalability, reliability, complexity) and qualitative (adherence to requirements, constraints, rules).</p>
+</div>
+
+<div class="section">
+<h3>Task 7 — Identify &amp; Mitigate Risks</h3>
+<p>Identify risks around quality requirements, communicate consequences, propose mitigation strategies. Example: healthcare system on public cloud — justify compliance, propose backup redundancy.</p>
+<div class="callout"><callout-label>Key</callout-label>These tasks are <strong>not</strong> linear — the architect iteratively switches between them throughout the project lifecycle.</div>
+</div>
+</div>
+
+<!-- ====== LECTURE 3 ====== -->
+<div class="lecture" id="lec3" data-search="skills technical soft abstract thinking decision communication negotiation breadth knowledge">
+<span class="lecture-tag">Lecture 6</span>
+<h2>Skills of a Software Architect</h2>
+<p class="lecture-subtitle">Technical depth, soft skills, and the growth mindset</p>
+
+<div class="section">
+<h3>Technical Skills</h3>
+<p>Foundation of the role. Not the fastest coder, but solid ability to evaluate solutions, build prototypes, and earn developer trust. Alone insufficient — many talented developers struggle as architects.</p>
+</div>
+
+<div class="section">
+<h3>Soft Skills</h3>
+<ul>
+<li><strong>Organisation</strong> — structure work, track decisions, manage documentation</li>
+<li><strong>Negotiation</strong> — navigate competing stakeholder interests</li>
+<li><strong>Communication</strong> — convey complex ideas to technical and non-technical audiences</li>
+<li><strong>Listening</strong> — understand needs, concerns, constraints</li>
+<li><strong>Guiding others</strong> — mentor developers toward architectural vision</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>Abstract &amp; System-Level Thinking</h3>
+<p>Step back from code and see the big picture. Biggest hurdle for skilled coders transitioning to architect. Involves reasoning without knowing every detail, identifying patterns across codebases, and anticipating emergent behavior.</p>
+</div>
+
+<div class="section">
+<h3>Decision-Making</h3>
+<p>Structured evaluation → accept uncertainty → document rationale → be willing to revisit. Indecisiveness is incompatible with the role.</p>
+</div>
+
+<div class="section">
+<h3>Breadth Over Depth</h3>
+<p>Wide awareness across many domains. Know enough to ask the right questions and delegate with confidence. Avoid going so deep you lose the big picture.</p>
+</div>
+
+<div class="callout"><callout-label>Mindset</callout-label>Not all skills are required from day one. Self-awareness, deliberate practice, and patience — excellence is a long-term journey.</div>
+</div>
+
+<!-- ====== LECTURE 4 ====== -->
+<div class="lecture" id="lec4" data-search="relationships roles analyst customer project manager developers testers operations Conway">
+<span class="lecture-tag">Lectures 7 – 8</span>
+<h2>Relationships &amp; Influencing Factors</h2>
+<p class="lecture-subtitle">Conway's Law, organizational context, and the factors that shape architecture</p>
+
+<div class="section">
+<h3>Key Relationships</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Role</th><th>Architect's Relationship</th></tr>
+<tr><td>Analyst / Product Owner</td><td>Receives reqs → assesses feasibility → flags inconsistencies → requests clarifications</td></tr>
+<tr><td>Customer</td><td>Technical advocate ("lawyer"); translates business needs into technical specs</td></tr>
+<tr><td>Project Manager</td><td>Receives constraints (time/budget/resources); advises on planning, risk, status</td></tr>
+<tr><td>Developers</td><td>Primary ongoing contact; provides guidelines &amp; knowledge transfer; receives feedback</td></tr>
+<tr><td>Testers</td><td>Provides business context, testing guidelines, test strategy; receives defect feedback</td></tr>
+<tr><td>IT Operations</td><td>Communicates infra constraints, deployment structure, configuration guidelines</td></tr>
+</table></div>
+</div>
+
+<div class="section">
+<h3>Conway's Law &amp; Inverse Conway Maneuver</h3>
+<div class="callout def"><callout-label>Conway's Law</callout-label>"Organizations which design systems are constrained to produce designs which are copies of the communication structures of those organizations."</div>
+<p><strong>Inverse Conway Maneuver</strong>: deliberately structure teams to match the desired target architecture. Organization → Architecture becomes Architecture → Organization.</p>
+</div>
+
+<div class="section">
+<h3>Three Categories of Influencing Factors</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Product-Related</th><th>Organizational</th><th>Technological</th></tr>
+<tr><td>Business goals, quality reqs, legal/regulatory compliance, industry standards</td><td>Company structure, team skills, budget, timeline, culture, processes</td><td>Existing infrastructure, integration protocols, available tools, team expertise</td></tr>
+</table></div>
+<div class="callout"><callout-label>Sweet Spot</callout-label>The best architecture is not always the most technically elegant — it's the one that best balances all influencing factors.</div>
+</div>
+
+<div class="section">
+<h3>System Context</h3>
+<p>The part of reality relevant to the system's requirements: <strong>stakeholders</strong>, <strong>existing systems</strong>, <strong>events</strong>, <strong>processes</strong>, and <strong>documents</strong>.</p>
+</div>
+
+<div class="section">
+<h3>Legal Factors</h3>
+<p>Privacy, healthcare data, children's online privacy, data sovereignty. The architect doesn't need to be a legal expert but must understand implications for storage, retention, and technology choices.</p>
+</div>
+</div>
+
+<!-- ====== LECTURE 5 ====== -->
+<div class="lecture" id="lec5" data-search="quality attributes goals requirements measurable performance scalability trade-offs FURPS ISO 25010">
+<span class="lecture-tag">Lectures 9 – 10</span>
+<h2>Quality Requirements &amp; Risk</h2>
+<p class="lecture-subtitle">Quality models, trade-offs, and risk management</p>
+
+<div class="section">
+<h3>Quality Attributes vs. Goals vs. Requirements</h3>
+<ul>
+<li><strong>Quality Attributes</strong> — the properties themselves (performance, availability, security…)</li>
+<li><strong>Quality Goals</strong> — high-level objectives involving multiple attributes ("improve UX")</li>
+<li><strong>Quality Requirements</strong> — specific, actionable, measurable ("99.9% uptime", "page load ≤ 500ms")</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>Relationships Between Quality Attributes</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Positively Correlated</th><th>Negatively Correlated</th></tr>
+<tr><td>Performance ↔ Scalability</td><td>Memory usage ↔ CPU (caching)</td></tr>
+<tr><td>Simplicity ↔ Understandability</td><td>Security ↔ Usability (MFA)</td></tr>
+<tr><td>Reliability ↔ Availability</td><td>Performance optimization ↔ Flexibility</td></tr>
+</table></div>
+</div>
+
+<div class="section">
+<h3>Risk Management</h3>
+<div class="callout def"><callout-label>Formula</callout-label><strong>Risk Severity = Probability × Amount of Harm</strong></div>
+<h4>Common Risk Categories</h4>
+<ul>
+<li><strong>Schedule &amp; Scope</strong> — tight deadlines → technical debt; missing MVP definition → scope creep</li>
+<li><strong>Requirements</strong> — ambiguity, high change rate, poor prioritization</li>
+<li><strong>Documentation</strong> — absent docs are costly and underrated</li>
+<li><strong>Infrastructure</strong> — underestimated resources fail at peak load</li>
+<li><strong>Expertise</strong> — single specialists are single points of failure</li>
+<li><strong>Technology</strong> — untested products introduce uncertainty</li>
+<li><strong>External Interfaces</strong> — late third-party changes force rework</li>
+</ul>
+<h4>Mitigation Tips</h4>
+<ul>
+<li>Define MVP and buffer the schedule. Compromise on scope, not quality.</li>
+<li>Adding people to a late project makes it later.</li>
+<li>Apply Murphy's Law — plan worst-case plus safety margin.</li>
+<li>Make all implicit assumptions explicit (including what a component is <em>not</em> responsible for).</li>
+</ul>
+</div>
+</div>
+
+<!-- ====== LECTURE 6 ====== -->
+<div class="lecture" id="lec6" data-search="design principles information hiding separation concerns modularity loose coupling high cohesion KISS YAGNI DRY SOLID">
+<span class="lecture-tag">Lectures 11 – 18</span>
+<h2>Design Principles</h2>
+<p class="lecture-subtitle">From information hiding to SOLID</p>
+
+<div class="section">
+<h3>§66–67 · What Are Design Principles?</h3>
+<p>Distilled knowledge guiding design decisions. Two objectives: <strong>reduce complexity</strong> and <strong>achieve long-term quality</strong>. Principle #1: <em>know when to break the rules</em> — fulfil requirements first, principles are tools not laws.</p>
+</div>
+
+<div class="section">
+<h3>§68 · Information Hiding</h3>
+<p>Treat every component as a black box. Hide internal details; allow access only through defined interfaces. Applies at all abstraction levels. Violations create tight coupling and fragility.</p>
+</div>
+
+<div class="section">
+<h3>§69 · Separation of Concerns</h3>
+<p>Each component handles one distinct concern. Mixing concerns increases coupling, complicates testing, reduces independent changeability. Complementary to information hiding.</p>
+</div>
+
+<div class="section">
+<h3>§70 · Modularity</h3>
+<p>Self-contained modules with defined interfaces. Enables independent development, testing, reuse, and composition. The structural expression of information hiding + separation of concerns.</p>
+</div>
+
+<div class="section">
+<h3>§71–73 · Loose Coupling</h3>
+<p>Keep dependencies <strong>few</strong> and <strong>simple</strong>. Seven coupling types from tightest to loosest:</p>
+<div class="tbl-wrap"><table>
+<tr><th>Type</th><th>Tightness</th></tr>
+<tr><td>Inheritance</td><td>Strongest — parent changes ripple to all children</td></tr>
+<tr><td>Caller–Callee</td><td>Very tight — direct method call</td></tr>
+<tr><td>Creation</td><td>Tight — instantiates and manages lifecycle</td></tr>
+<tr><td>Shared Data Structure</td><td>Moderate — shared map/DB/file</td></tr>
+<tr><td>Time Coupling (sequential, scheduling, real-time)</td><td>Varies</td></tr>
+<tr><td>Execution Location</td><td>Tight — depends on specific env</td></tr>
+<tr><td>Message Exchange</td><td>Looser — queue/broker decouples sender from receiver</td></tr>
+</table></div>
+</div>
+
+<div class="section">
+<h3>§74–75 · High Cohesion</h3>
+<p>Degree to which elements inside a component serve a unified purpose. High cohesion → low coupling. Context-dependent and hard to measure precisely.</p>
+</div>
+
+<div class="section">
+<h3>§76 · KISS — Keep It Simple</h3>
+<p>Simple systems are easier to understand, maintain, and less error-prone. Tension: simplicity vs. future flexibility, simplicity vs. performance.</p>
+</div>
+
+<div class="section">
+<h3>§77 · YAGNI — You Aren't Gonna Need It</h3>
+<p>Don't implement functionality before it's actually required. Unused code must still be read, understood, tested, and maintained.</p>
+</div>
+
+<div class="section">
+<h3>§78 · DRY — Don't Repeat Yourself</h3>
+<p>Single authoritative representation. Eliminates duplicate work, bugs, and tests. Trade-off: DRY introduces coupling — in microservices, duplication may be preferable to shared coupling.</p>
+</div>
+
+<div class="section">
+<h3>§79–80 · Expect Errors &amp; Robustness Principle</h3>
+<p><strong>Anticipate</strong> failure modes at design time. <strong>Contain</strong> blast radius (circuit breakers, fallbacks). <strong>Support analysis</strong> (logs, metrics, tracing).</p>
+<div class="callout def"><callout-label>Postel's Law</callout-label>Be strict in what you produce; be liberal in what you accept. Tolerate reasonable input variation; degrade gracefully.</div>
+</div>
+
+<div class="section">
+<h3>§81–82 · Abstraction &amp; Conceptual Integrity</h3>
+<p>Create generalisations that hide implementation detail. Depend only on abstractions, never concrete implementations. <strong>Conceptual integrity</strong>: build the whole system around a consistent set of clear concepts — the most important consideration in design.</p>
+</div>
+
+<div class="section">
+<h3>§83–87 · SOLID Principles</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Letter</th><th>Principle</th><th>Key Point</th></tr>
+<tr><td>S</td><td>Single Responsibility</td><td>One component, one reason to change</td></tr>
+<tr><td>O</td><td>Open/Closed</td><td>Open for extension, closed for modification</td></tr>
+<tr><td>L</td><td>Liskov Substitution</td><td>Subtypes must honor supertype contract — no surprises</td></tr>
+<tr><td>I</td><td>Interface Segregation</td><td>Many small interfaces > one large general-purpose interface</td></tr>
+<tr><td>D</td><td>Dependency Inversion</td><td>Both high-level and low-level depend on abstractions</td></tr>
+</table></div>
+</div>
+</div>
+
+<!-- ====== LECTURE 7 ====== -->
+<div class="lecture" id="lec7" data-search="patterns layers pipes filters microservices dependency injection factory proxy decorator">
+<span class="lecture-tag">Lectures 19 – 24</span>
+<h2>Architecture Patterns</h2>
+<p class="lecture-subtitle">Layers, Pipes &amp; Filters, Microservices, DI, and more</p>
+
+<div class="section">
+<h3>§88 · What Are Patterns?</h3>
+<p>Reusable solutions to recurring problems — discovered, not invented. Libraries reuse <em>code</em>; frameworks reuse <em>structure</em>; patterns reuse <em>thinking</em>.</p>
+</div>
+
+<div class="section">
+<h3>§89–92 · Layers Pattern</h3>
+<p>Vertical stack: each layer depends only downward, provides abstraction upward.</p>
+<div class="tbl-wrap"><table>
+<tr><th>Closed (Strict)</th><th>Open (Loose)</th></tr>
+<tr><td>Call only next layer down. High modularity, predictable.</td><td>Skip layers. Better performance, more coupling.</td></tr>
+</table></div>
+<p><strong>Layer vs. Tier</strong>: Layers = logical structure; Tiers = physical deployment. Both can coexist.</p>
+</div>
+
+<div class="section">
+<h3>§93–95 · Pipes &amp; Filters</h3>
+<p>Data flows through a pipeline: <strong>source</strong> → <strong>filter</strong> (transform) → <strong>pipe</strong> (transfer/buffer) → … → <strong>sink</strong>. Filters are independent and unaware of each other.</p>
+<p>Use cases: multimedia encoding, Unix CLI pipelines, streaming VOD ingestion, ETL pipelines.</p>
+<p>Pros: simplicity, flexibility, scalability, team scalability. Cons: error propagation harder, buffer overflow risk, poor for shared state.</p>
+</div>
+
+<div class="section">
+<h3>§96–98 · Microservices</h3>
+<p>Small, independently deployable units each responsible for a single business capability. Key practices:</p>
+<ul>
+<li><strong>Single Responsibility</strong> — one business domain per service</li>
+<li><strong>Database per Service</strong> — no shared schemas; data duplication is accepted overhead</li>
+<li><strong>Inverse Conway Maneuver</strong> — small focused teams → loosely coupled architecture</li>
+</ul>
+<div class="tbl-wrap"><table>
+<tr><th>Pros</th><th>Cons</th></tr>
+<tr><td>Independent change, scale, deploy</td><td>Network latency, outages, bandwidth</td></tr>
+<tr><td>Tech flexibility per service</td><td>Error tracing across services harder</td></tr>
+<tr><td>Faster dev (smaller codebases)</td><td>Operations complexity much higher</td></tr>
+<tr><td></td><td>Runtime errors (not compile-time)</td></tr>
+</table></div>
+</div>
+
+<div class="section">
+<h3>§99–101 · Dependency Injection</h3>
+<p>A DI framework creates concrete implementations at runtime and injects them into classes that declare a dependency on an abstraction.</p>
+<p>Key terms: <strong>assembler/injector</strong>, <strong>bean/component</strong>, <strong>injection point</strong> (constructor/setter), <strong>configuration</strong>.</p>
+<p><strong>IoC vs. DI</strong>: DI is a special case of Inversion of Control. All DI is IoC, but not all IoC is DI (callbacks, schedulers, event loops are also IoC).</p>
+</div>
+
+<div class="section">
+<h3>§118–121 · Reducing Coupling Tactics</h3>
+<h4>Structural Dependency</h4>
+<ul>
+<li><strong>Polymorphism</strong> — depend on interface, not concrete class</li>
+<li><strong>Facade</strong> — single entry-point shielding internal complexity</li>
+<li><strong>Decorator</strong> — layered behaviors via delegation; no coupling between decorators</li>
+</ul>
+<h4>Instantiation Dependency</h4>
+<ul>
+<li><strong>Factory Pattern</strong> — centralized creation; clients depend only on interface</li>
+<li><strong>Proxy Pattern</strong> — lazy initialization; same interface wrapper</li>
+<li><strong>Dependency Injection</strong> — framework wires entire dependency graph</li>
+</ul>
+<h4>Call Dependency</h4>
+<ul>
+<li><strong>Abstractions / Adapter</strong> — interface between caller and callee</li>
+<li><strong>Avoid cycles</strong> — cycles cause tight coupling and unpredictable behavior</li>
+<li><strong>Async messaging</strong> — fire-and-forget via broker; decouples from receiver's availability</li>
+<li><strong>Restrict communication</strong> — layer rules contain coupling within boundaries</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>§121 · Static vs. Dynamic Coupling</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Aspect</th><th>Static</th><th>Dynamic</th></tr>
+<tr><td>Determined at</td><td>Compile time</td><td>Runtime</td></tr>
+<tr><td>Performance</td><td>Higher (no resolution overhead)</td><td>Lower</td></tr>
+<tr><td>Tooling</td><td>Full IDE + compiler support</td><td>Limited; runtime tools only</td></tr>
+<tr><td>Flexibility</td><td>Low (rebuild to change)</td><td>High (reconfigure without rebuild)</td></tr>
+<tr><td>Debuggability</td><td>Easy (errors caught early)</td><td>Hard (errors surface in production)</td></tr>
+</table></div>
+<div class="callout"><callout-label>Critical</callout-label><strong>Dynamic ≠ loose.</strong> Switching to dynamic coupling does not reduce coupling. DIP must also be applied — inject abstractions, not concretes.</div>
+</div>
+</div>
+
+<!-- ====== LECTURE 8 ====== -->
+<div class="lecture" id="lec8" data-search="cross-cutting concerns persistence error handling security internationalization interfaces documentation annotations AOP">
+<span class="lecture-tag">Lectures 25 – 28</span>
+<h2>Cross-Cutting Concerns &amp; Interfaces</h2>
+<p class="lecture-subtitle">From AOP to interface best practices</p>
+
+<div class="section">
+<h3>Cross-Cutting Concerns</h3>
+<p>Aspects that affect multiple components: persistence, error handling, security, internationalization, communication, UI/UX, business rules. Without management: DRY violations, reduced conceptual integrity, high change cost.</p>
+</div>
+
+<div class="section">
+<h3>Annotations &amp; AOP</h3>
+<p><strong>Annotations</strong> — metadata decorators evaluated at compile time (code gen, static analysis) or runtime (DI, ORM).</p>
+<p><strong>Aspect-Oriented Programming</strong> — separates cross-cutting concerns from business logic; weaves them in automatically. Key terms: <strong>aspect</strong> (encapsulated concern), <strong>advice</strong> (action: before/after/around), <strong>pointcut</strong> (which join points), <strong>join point</strong> (method execution).</p>
+</div>
+
+<div class="section">
+<h3>Interface Design</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Resource-Oriented (REST)</th><th>Service-Oriented (RPC)</th></tr>
+<tr><td>Fixed uniform operations on URI-identified resources</td><td>Arbitrary domain-specific operations</td></tr>
+<tr><td>Lower complexity, multiple representations</td><td>More expressive, higher complexity</td></tr>
+</table></div>
+<p>Sync vs. Async: sync blocks until response; async continues, result delivered later.</p>
+</div>
+
+<div class="section">
+<h3>Interface Best Practices</h3>
+<ul>
+<li>Try using the interface yourself (build test clients)</li>
+<li>Clarify requirements with both consumer and provider</li>
+<li>Apply information hiding — expose only what's needed</li>
+<li>Meaningful, self-descriptive names; include units for quantities</li>
+<li>Minimize surprises and side effects</li>
+<li>Provide atomic information units (no blob parsing)</li>
+<li>Write thorough documentation</li>
+</ul>
+</div>
+</div>
+
+<!-- ====== LECTURE 9 ====== -->
+<div class="lecture" id="lec9" data-search="data modeling relational document graph conceptual logical physical product sum types normalization">
+<span class="lecture-tag">Lectures 36 – 39</span>
+<h2>Data Modeling</h2>
+<p class="lecture-subtitle">Relational, document, graph — and decoupling data representations</p>
+
+<div class="section">
+<h3>Three Model Levels</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Aspect</th><th>Conceptual</th><th>Logical</th><th>Physical</th></tr>
+<tr><td>Level</td><td>Highest</td><td>Medium</td><td>Lowest</td></tr>
+<tr><td>Purpose</td><td>Explore requirements</td><td>Define structure precisely</td><td>Specify implementation</td></tr>
+<tr><td>Audience</td><td>Business + tech stakeholders</td><td>Engineers + analysts</td><td>Data engineers / DBAs</td></tr>
+<tr><td>Technology-specific?</td><td>No</td><td>No</td><td>Yes</td></tr>
+</table></div>
+</div>
+
+<div class="section">
+<h3>Three Modeling Techniques</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Aspect</th><th>Relational</th><th>Document</th><th>Graph</th></tr>
+<tr><td>Structure</td><td>Tables + rows</td><td>Collections + tree docs</td><td>Nodes + directed edges</td></tr>
+<tr><td>Schema</td><td>On write (strict)</td><td>On read (flexible)</td><td>Flexible (property-based)</td></tr>
+<tr><td>Best for</td><td>Transactional, all relationship types</td><td>Hierarchical, read-heavy</td><td>Highly connected, deep traversals</td></tr>
+</table></div>
+</div>
+
+<div class="section">
+<h3>Product &amp; Sum Types</h3>
+<p><strong>Product type</strong>: all attributes required simultaneously (AND). <strong>Sum type</strong>: exactly one variant active (OR — discriminated union). Relational DBs and JSON can't natively enforce sum types.</p>
+<div class="callout"><callout-label>Principle</callout-label>Define the data model abstractly — each storage/protocol layer encodes it independently. Enables independent optimization and migration per layer.</div>
+</div>
+</div>
+
+<!-- ====== LECTURE 10 ====== -->
+<div class="lecture" id="lec10" data-search="design strategies performance availability adaptability flexibility caching redundancy error prevention">
+<span class="lecture-tag">Lectures 29 – 31</span>
+<h2>Design Strategies</h2>
+<p class="lecture-subtitle">Achieving performance, flexibility, and high availability</p>
+
+<div class="section">
+<h3>High Performance</h3>
+<ul>
+<li><strong>Add hardware</strong> — more servers, memory, faster CPUs</li>
+<li><strong>Reduce communication</strong> — cache frequently accessed data; batch multiple requests</li>
+<li><strong>Adjust distribution</strong> — parallelize queries but avoid excessive cross-instance coordination</li>
+<li><strong>Reduce flexibility</strong> — hard-code stable business logic to eliminate configuration hops</li>
+<li><strong>Continuous load testing</strong> — optimizations erode; test before high-traffic events</li>
+<li><strong>Compromise energy efficiency</strong> — last resort (disable throttling, add GPUs)</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>Adaptability &amp; Flexibility</h3>
+<ul>
+<li><strong>Target flexibility where needed</strong> — Strategy pattern, feature flags, facades, responsive design, containerization</li>
+<li><strong>Configuration files</strong> — externalize environment settings</li>
+<li><strong>Keep changes local</strong> — high cohesion + single responsibility</li>
+<li><strong>Polymorphism</strong> — common interface enables adding/changing implementations</li>
+<li><strong>Information hiding</strong> — details change without affecting clients</li>
+<li><strong>Reduce coupling</strong> — limits change propagation</li>
+<li><strong>Maintainable code</strong> — prerequisite for adaptability</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>High Availability</h3>
+<h4>1. Error Prevention</h4>
+<p>Transactions (atomicity), input validation (reject at boundary), back pressure (prevent queue overflow).</p>
+<h4>2. Error Detection</h4>
+<p>Continuous monitoring (metrics dashboards), cross-validation (independent reconciliation).</p>
+<h4>3. Error Handling</h4>
+<p>Exception handling &amp; retry, rollback (data + deployments), redundancy (load balancer + replicas), automatic replacement (health monitoring restarts instances).</p>
+</div>
+</div>
+
+<!-- ====== LECTURE 11 ====== -->
+<div class="lecture" id="lec11" data-search="iterative incremental architecture views arc42 context building block runtime deployment top-down bottom-up">
+<span class="lecture-tag">Lectures 40 – 42</span>
+<h2>Architecture Development &amp; Views</h2>
+<p class="lecture-subtitle">Iterative design, arc42 views, top-down vs. bottom-up</p>
+
+<div class="section">
+<h3>Iterative &amp; Incremental</h3>
+<p><strong>Iterative</strong>: repeat design steps to refine decisions and incorporate feedback. <strong>Incremental</strong>: each iteration extends the solution by a focused set of concerns. Architecture feedback is not automatic — it must be actively sought through structured stakeholder reviews.</p>
+</div>
+
+<div class="section">
+<h3>arc42 Architectural Views</h3>
+<div class="tbl-wrap"><table>
+<tr><th>View</th><th>Describes</th><th>Audience</th></tr>
+<tr><td>Context</td><td>System as black box; external actors &amp; interfaces</td><td>All stakeholders</td></tr>
+<tr><td>Building Block</td><td>Static decomposition into components &amp; relationships</td><td>Developers, PM</td></tr>
+<tr><td>Runtime</td><td>Dynamic behavior: processes, interactions at execution time</td><td>Dev, test, ops</td></tr>
+<tr><td>Deployment</td><td>Infrastructure topology; component-to-hardware mapping</td><td>Ops, architects</td></tr>
+</table></div>
+<p>Views may overlap but must be consistent and never contradict each other.</p>
+</div>
+
+<div class="section">
+<h3>Top-Down vs. Bottom-Up</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Dimension</th><th>Top-Down</th><th>Bottom-Up</th></tr>
+<tr><td>Starting point</td><td>Complete system vision; decompose</td><td>Individual components; assemble</td></tr>
+<tr><td>Best for</td><td>Large-scale, clear scope</td><td>R&D-heavy, parallel dev</td></tr>
+<tr><td>Integration risk</td><td>Higher (assumptions may not hold)</td><td>Lower (details resolved first)</td></tr>
+<tr><td>Reuse</td><td>May overlook existing solutions</td><td>Naturally favours reuse</td></tr>
+<tr><td>Feedback</td><td>Late</td><td>Early (incremental testing)</td></tr>
+</table></div>
+<p>Both can be combined: start bottom-up for ambiguous parts, then apply top-down for the rest.</p>
+</div>
+</div>
+
+<!-- ====== LECTURE 12 ====== -->
+<div class="lecture" id="lec12" data-search="documentation communication arc42 template ADR architecture decision records UML diagrams best practices">
+<span class="lecture-tag">Lectures 43 – 48</span>
+<h2>Documentation &amp; Evaluation</h2>
+<p class="lecture-subtitle">Templates, ADRs, diagrams, metrics, ATAM</p>
+
+<div class="section">
+<h3>Why Document?</h3>
+<p>Source code is not documentation — it lacks structural overview, decision rationale, technology context, and cross-cutting concerns. Documentation cost directly impacts maintenance, evolution, and bug-fixing speed.</p>
+<div class="callout"><callout-label>Principle</callout-label>Verbal communication leads to decisions. Written communication records them.</div>
+</div>
+
+<div class="section">
+<h3>arc42 Template (12 Chapters)</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Ch.</th><th>Title</th><th>Contents</th></tr>
+<tr><td>1</td><td>Introduction &amp; Goals</td><td>Central requirements, quality goals, driving forces</td></tr>
+<tr><td>2</td><td>Constraints</td><td>Technical, organizational, regulatory restrictions</td></tr>
+<tr><td>3</td><td>Context &amp; Scope</td><td>System boundaries, in/out of scope, external interfaces</td></tr>
+<tr><td>4</td><td>Solution Strategy</td><td>Technology choices, decomposition, quality approach</td></tr>
+<tr><td>5</td><td>Building Block View</td><td>Static decomposition of components</td></tr>
+<tr><td>6</td><td>Runtime View</td><td>Dynamic behavior in specific scenarios</td></tr>
+<tr><td>7</td><td>Deployment View</td><td>Infrastructure mapping</td></tr>
+<tr><td>8</td><td>Cross-Cutting Concepts</td><td>System-wide guidelines and solutions</td></tr>
+<tr><td>9</td><td>Architecture Decisions</td><td>Important decisions with rationale</td></tr>
+<tr><td>10</td><td>Quality Requirements</td><td>Detailed quality scenarios</td></tr>
+<tr><td>11</td><td>Risks &amp; Technical Debt</td><td>Known risks, accumulated debt</td></tr>
+<tr><td>12</td><td>Glossary</td><td>Key terms and definitions</td></tr>
+</table></div>
+</div>
+
+<div class="section">
+<h3>Architecture Decision Records (ADRs)</h3>
+<p>Lightweight format: <strong>Title</strong> → <strong>Status</strong> (under review / accepted / deprecated / superseded) → <strong>Context</strong> → <strong>Decision + Rationale</strong> → <strong>Consequences</strong> (positive &amp; negative).</p>
+</div>
+
+<div class="section">
+<h3>Documentation Best Practices</h3>
+<ul>
+<li>Use a standardized structure or template</li>
+<li>Write from the reader's perspective (active voice, simple language)</li>
+<li>Avoid unnecessary repetition</li>
+<li>Avoid ambiguity (formal notation, consistent names, glossary)</li>
+<li>Provide rationale for decisions; record rejected alternatives</li>
+<li>Declutter diagrams: <strong>7 ± 2 elements</strong> per diagram</li>
+<li>Keep documentation current (fixed sync cadence, not every minor change)</li>
+<li>Communicate status (change log, version control, stability signals)</li>
+<li>Review before publishing with target audience representatives</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>Quality Evaluation</h3>
+<div class="tbl-wrap"><table>
+<tr><th></th><th>Static Analysis</th><th>Dynamic Analysis</th></tr>
+<tr><td>When</td><td>Without executing software</td><td>During execution</td></tr>
+<tr><td>What</td><td>LOC, coupling, complexity, effort to change</td><td>Response times, resource usage, test results</td></tr>
+</table></div>
+<h4>Key Metrics</h4>
+<ul>
+<li><strong>Instability</strong>: I = Ce / (Ca + Ce). I=0: stable; I=1: unstable</li>
+<li><strong>Cyclomatic complexity</strong>: number of independent execution paths</li>
+<li><strong>MTBF / MTTR</strong>: reliability indicators</li>
+</ul>
+<div class="callout def"><callout-label>Goodhart's Law</callout-label>When a measure becomes a target, it ceases to be a good measure. Use metrics as diagnostic signals, not mandatory targets.</div>
+</div>
+
+<div class="section">
+<h3>ATAM — Architecture Trade-off Analysis Method</h3>
+<p>Leading qualitative evaluation method (Carnegie Mellon SEI). Three focuses: early risk identification, making correct trade-offs, identifying sensitivity points.</p>
+<p>Process: business drivers → quality attributes → scenarios → utility tree (prioritized) → architect presents → trade-off analysis → sensitivity points → risk themes feed back.</p>
+<p>Benefits: clarifies quality reqs, improves docs, documents decisions, early risk detection, better stakeholder communication.</p>
+</div>
+
+<details>
+<summary>Quality Scenarios — Three Types</summary>
+<div class="details-body">
+<div class="tbl-wrap"><table>
+<tr><th>Type</th><th>Also Called</th><th>Focus</th></tr>
+<tr><td>Usage</td><td>Application scenario</td><td>Typical user–system interactions; expected performance</td></tr>
+<tr><td>Growth</td><td>Change / modification</td><td>Ability to adapt to new features, changing requirements or load</td></tr>
+<tr><td>Exploratory</td><td>Stress / failure / boundary</td><td>Extreme conditions: outages, traffic spikes, attacks</td></tr>
+</table></div>
+<p>Quality scenarios must be <strong>exact and measurable</strong>. If it cannot be measured, it cannot be declared "done."</p>
+</div>
+</details>
+</div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+
+<!-- BACK TO TOP -->
+<button class="btt" id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+
+<script>
+// Theme toggle
+function toggleTheme(){
+  const html=document.documentElement;
+  html.dataset.theme=html.dataset.theme==='dark'?'light':'dark';
+  localStorage.setItem('theme',html.dataset.theme);
+}
+(function(){const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t})();
+
+// Nav
+function openNav(){document.getElementById('nav').classList.add('open');document.getElementById('overlay').classList.add('show')}
+function closeNav(){document.getElementById('nav').classList.remove('open');document.getElementById('overlay').classList.remove('show')}
+
+// Build nav links
+(function(){
+  const lectures=document.querySelectorAll('.lecture');
+  const container=document.getElementById('nav-links');
+  lectures.forEach((lec,i)=>{
+    const tag=lec.querySelector('.lecture-tag')?.textContent||'';
+    const title=lec.querySelector('h2')?.textContent||'';
+    const a=document.createElement('a');
+    a.href='#'+lec.id;
+    a.textContent=title;
+    a.onclick=()=>closeNav();
+    const grp=document.createElement('div');
+    grp.className='nav-group';
+    const gt=document.createElement('div');
+    gt.className='nav-group-title';
+    gt.textContent=tag;
+    grp.appendChild(gt);
+    grp.appendChild(a);
+    // sub-links for sections
+    lec.querySelectorAll('h3').forEach(h3=>{
+      const sa=document.createElement('a');
+      const id='s'+i+'-'+h3.textContent.replace(/[^a-z0-9]/gi,'').slice(0,20);
+      h3.id=id;
+      sa.href='#'+id;
+      sa.textContent=h3.textContent.replace(/^§[\d–\s·]+/,'').trim();
+      sa.style.paddingLeft='1.8rem';
+      sa.style.fontSize='.76rem';
+      sa.onclick=()=>closeNav();
+      grp.appendChild(sa);
+    });
+    container.appendChild(grp);
+  });
+})();
+
+// Progress bar
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  document.getElementById('progress').style.width=(st/sh*100)+'%';
+  document.getElementById('btt').classList.toggle('show',st>400);
+});
+
+// Search filter
+function filterSections(q){
+  q=q.toLowerCase().trim();
+  document.querySelectorAll('.lecture').forEach(lec=>{
+    if(!q){lec.style.display='';return}
+    const text=(lec.textContent+' '+(lec.dataset.search||'')).toLowerCase();
+    lec.style.display=text.includes(q)?'':'none';
+  });
+}
+</script>
+</body>
+</html>
