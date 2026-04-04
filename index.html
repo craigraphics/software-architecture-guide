@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Software Architecture — Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" media="print" onload="this.media='all'">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
@@ -25,7 +27,6 @@
   --accent:#666;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
 
 html{scroll-behavior:smooth;font-size:15px}
 body{font-family:var(--sans);background:var(--bg);color:var(--tx);line-height:1.7;transition:background var(--transition),color var(--transition)}
@@ -75,7 +76,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--tx);line-height:1.
 .callout{background:var(--bg3);border-left:3px solid var(--bd2);padding:.8rem 1rem;margin:1rem 0;border-radius:0 3px 3px 0;font-size:.88rem;line-height:1.6}
 .callout.def{border-left-color:var(--accent)}
 .callout strong{font-weight:600}
-.callout-label{font-family:var(--font);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:.3rem;display:block;font-weight:600}
+callout-label{font-family:var(--font);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:.3rem;display:block;font-weight:600}
 
 /* TABLES */
 .tbl-wrap{overflow-x:auto;margin:1rem 0}
@@ -141,7 +142,7 @@ details .details-body{padding:.8rem .7rem .5rem;font-size:.88rem}
 .fc-header{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;cursor:pointer;user-select:none;gap:10px}
 .fc-header:hover{background:var(--bg3)}
 .fc-left{display:flex;align-items:center;gap:10px;min-width:0}
-.fc-tag{font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.fc-tag{font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;background:var(--bg4);color:var(--tx2)}
 .fc-title{font-size:14px;font-weight:500;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fc-arrow{font-size:11px;color:var(--tx3);transition:transform .2s;flex-shrink:0}
 .fc-arrow.open{transform:rotate(90deg)}
@@ -153,24 +154,15 @@ details .details-body{padding:.8rem .7rem .5rem;font-size:.88rem}
 .fc-g3{grid-template-columns:1fr 1fr 1fr}
 .fc-g4{grid-template-columns:1fr 1fr 1fr 1fr}
 .fc-g5{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
-.fc-box{border-radius:6px;padding:10px 12px}
-.fc-box-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
-.fc-box-text{font-size:12px;line-height:1.5}
-.fc-hook{border-left:3px solid;padding:8px 12px;border-radius:0 6px 6px 0;font-size:12px;line-height:1.5;font-style:italic;margin-top:4px}
+.fc-box{border-radius:6px;padding:10px 12px;background:var(--bg4)}
+.fc-box-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;color:var(--tx2)}
+.fc-box-text{font-size:12px;line-height:1.5;color:var(--tx)}
+.fc-hook{border-left:3px solid var(--accent);padding:10px 14px 20px;border-radius:0 6px 6px 0;font-size:12px;line-height:1.6;font-style:italic;margin-top:6px;background:var(--bg3);color:var(--tx2)}
 .fc-divider{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--tx3);margin:4px 0 8px}
-/* color ramps — adapt to theme */
-.r-pu .fc-tag{background:#EEEDFE;color:#3C3489} .r-pu .fc-box{background:#EEEDFE} .r-pu .fc-box-label{color:#534AB7} .r-pu .fc-box-text{color:#26215C} .r-pu .fc-hook{border-color:#534AB7;background:#EEEDFE;color:#26215C}
-.r-te .fc-tag{background:#E1F5EE;color:#085041} .r-te .fc-box{background:#E1F5EE} .r-te .fc-box-label{color:#0F6E56} .r-te .fc-box-text{color:#04342C} .r-te .fc-hook{border-color:#0F6E56;background:#E1F5EE;color:#04342C}
-.r-am .fc-tag{background:#FAEEDA;color:#633806} .r-am .fc-box{background:#FAEEDA} .r-am .fc-box-label{color:#854F0B} .r-am .fc-box-text{color:#412402} .r-am .fc-hook{border-color:#854F0B;background:#FAEEDA;color:#412402}
-.r-bl .fc-tag{background:#E6F1FB;color:#0C447C} .r-bl .fc-box{background:#E6F1FB} .r-bl .fc-box-label{color:#185FA5} .r-bl .fc-box-text{color:#042C53} .r-bl .fc-hook{border-color:#185FA5;background:#E6F1FB;color:#042C53}
-.r-co .fc-tag{background:#FAECE7;color:#712B13} .r-co .fc-box{background:#FAECE7} .r-co .fc-box-label{color:#993C1D} .r-co .fc-box-text{color:#4A1B0C} .r-co .fc-hook{border-color:#993C1D;background:#FAECE7;color:#4A1B0C}
-.r-gr .fc-tag{background:#EAF3DE;color:#27500A} .r-gr .fc-box{background:#EAF3DE} .r-gr .fc-box-label{color:#3B6D11} .r-gr .fc-box-text{color:#173404} .r-gr .fc-hook{border-color:#3B6D11;background:#EAF3DE;color:#173404}
-.r-re .fc-tag{background:#FCEBEB;color:#791F1F} .r-re .fc-box{background:#FCEBEB} .r-re .fc-box-label{color:#A32D2D} .r-re .fc-box-text{color:#501313} .r-re .fc-hook{border-color:#A32D2D;background:#FCEBEB;color:#501313}
-.r-pi .fc-tag{background:#FBEAF0;color:#72243E} .r-pi .fc-box{background:#FBEAF0} .r-pi .fc-box-label{color:#993556} .r-pi .fc-box-text{color:#4B1528} .r-pi .fc-hook{border-color:#993556;background:#FBEAF0;color:#4B1528}
-.r-gy .fc-tag{background:#F1EFE8;color:#444441} .r-gy .fc-box{background:#F1EFE8} .r-gy .fc-box-label{color:#5F5E5A} .r-gy .fc-box-text{color:#2C2C2A} .r-gy .fc-hook{border-color:#888780;background:#F1EFE8;color:#2C2C2A}
 @media(max-width:700px){.fc-g3,.fc-g4,.fc-g5{grid-template-columns:1fr 1fr}.fc-g2{grid-template-columns:1fr}}
 @media(max-width:480px){.fc-g2,.fc-g3,.fc-g4,.fc-g5{grid-template-columns:1fr}}
-@media print{
+
+@media print {
   .nav,.topbar,.btt,.progress,.overlay,.menu-btn,.theme-toggle,.search-box{display:none!important}
   .main{margin-left:0!important}
   .content{max-width:100%;padding:0}
@@ -198,6 +190,7 @@ details .details-body{padding:.8rem .7rem .5rem;font-size:.88rem}
   <div class="page-tabs">
     <button class="page-tab active" onclick="showPage('notes')" id="tab-notes">Study Notes</button>
     <button class="page-tab" onclick="showPage('flashcards')" id="tab-flashcards">Flashcards</button>
+
   </div>
   <div class="topbar-right">
     <input type="text" class="search-box" id="search" placeholder="Search…" oninput="filterSections(this.value)">
@@ -219,7 +212,7 @@ details .details-body{padding:.8rem .7rem .5rem;font-size:.88rem}
 </div>
 
 <!-- ====== LECTURE 1 ====== -->
-<div class="lecture" id="lec1" data-search="software architecture what is software complexity project goals architect role">
+<div class="lecture" id="lec1" data-search="software architecture what is software complexity project goals architect role ISO 42010 batch interactive embedded real-time system categories">
 <span class="lecture-tag">Lectures 1 – 9</span>
 <h2>Foundations</h2>
 <p class="lecture-subtitle">What software architecture is, why it matters, and the architect's role</p>
@@ -306,6 +299,19 @@ details .details-body{padding:.8rem .7rem .5rem;font-size:.88rem}
 <div class="callout"><callout-label>Key Rule</callout-label>A system can be scalable without being elastic. But elastic scaling requires horizontal scalability as a prerequisite.</div>
 <h4>Constraints</h4>
 <p>Externally imposed limitations (technical, time/budget, legal/regulatory) that narrow the solution space — not always bad, as they reduce decisions the architect must make.</p>
+</div>
+
+<div class="section">
+<h3>§10b · ISO/IEC/IEEE 42010 &amp; Software System Categories</h3>
+<div class="callout def"><callout-label>ISO/IEC/IEEE 42010 Definition</callout-label>Software architecture is <em>"the fundamental concepts or properties of a system in its environment, embodied in its elements, relationships, and the principles of its design and evolution."</em> The standard provides a shared vocabulary for architecture description across all system types.</div>
+<h4>Common Software System Categories</h4>
+<div class="tbl-wrap"><table>
+<tr><th>Category</th><th>Characteristics</th><th>Examples</th></tr>
+<tr><td><strong>Batch</strong></td><td>Processes large datasets without user interaction; scheduled or triggered jobs</td><td>Payroll processing, nightly ETL, report generation</td></tr>
+<tr><td><strong>Interactive Online</strong></td><td>Real-time user interaction; UI-driven; response-time critical</td><td>Web apps, mobile apps, e-commerce platforms</td></tr>
+<tr><td><strong>Embedded Real-Time</strong></td><td>Hardware-integrated; strict timing constraints; resource-constrained</td><td>Car ECUs, medical devices, industrial controllers</td></tr>
+<tr><td><strong>Decision Support</strong></td><td>Analytical; data-intensive; supports business decision-making</td><td>BI dashboards, recommendation engines, analytics platforms</td></tr>
+</table></div>
 </div>
 
 <details>
@@ -505,6 +511,33 @@ details .details-body{padding:.8rem .7rem .5rem;font-size:.88rem}
 <li>Make all implicit assumptions explicit (including what a component is <em>not</em> responsible for).</li>
 </ul>
 </div>
+<div class="section">
+<h3>ISO/IEC 25010 Quality Model</h3>
+<p>The standard quality model defining eight top-level quality characteristics for software products. Used as the basis for quality trees and scenario-based evaluation (e.g., ATAM).</p>
+<div class="tbl-wrap"><table>
+<tr><th>Characteristic</th><th>What it covers</th></tr>
+<tr><td>Functional Suitability</td><td>Completeness, correctness, appropriateness of functions</td></tr>
+<tr><td>Performance Efficiency</td><td>Time behavior, resource utilization, capacity</td></tr>
+<tr><td>Compatibility</td><td>Co-existence with other systems, interoperability</td></tr>
+<tr><td>Usability</td><td>Learnability, operability, user error protection, accessibility</td></tr>
+<tr><td>Reliability</td><td>Maturity, availability, fault tolerance, recoverability</td></tr>
+<tr><td>Security</td><td>Confidentiality, integrity, non-repudiation, accountability, authenticity</td></tr>
+<tr><td>Maintainability</td><td>Modularity, reusability, analyzability, modifiability, testability</td></tr>
+<tr><td>Portability</td><td>Adaptability, installability, replaceability</td></tr>
+</table></div>
+</div>
+
+<div class="section">
+<h3>Quality Tree</h3>
+<p>A hierarchical structure used in ATAM to concretize and prioritize quality requirements. Bridges abstract quality goals and testable scenarios:</p>
+<ul>
+<li><strong>Root</strong> — "Quality" (the ultimate goal)</li>
+<li><strong>Level 1 — Characteristics</strong> from ISO 25010 (e.g., Performance, Reliability, Security)</li>
+<li><strong>Level 2 — System-specific attributes</strong> (e.g., "Response time under peak load")</li>
+<li><strong>Leaves — Concrete quality scenarios</strong>, each tagged with priority (H / M / L) by stakeholders</li>
+</ul>
+<div class="callout"><callout-label>Purpose</callout-label>Turns vague goals ("we need good performance") into specific, measurable scenarios that can be evaluated and traded off. Enables architects to detect conflicting quality goals early.</div>
+</div>
 </div>
 
 <!-- ====== LECTURE 6 ====== -->
@@ -589,6 +622,16 @@ details .details-body{padding:.8rem .7rem .5rem;font-size:.88rem}
 <tr><td>I</td><td>Interface Segregation</td><td>Many small interfaces > one large general-purpose interface</td></tr>
 <tr><td>D</td><td>Dependency Inversion</td><td>Both high-level and low-level depend on abstractions</td></tr>
 </table></div>
+<div class="section">
+<h3>Testing Principles</h3>
+<p>Key principles every architect must understand — testing informs design decisions about observability, fault tolerance, and testability:</p>
+<ul>
+<li><strong>Testing is incomplete</strong> — It is not possible to discover all errors in any non-trivial system; exhaustive testing is infeasible.</li>
+<li><strong>Error clustering</strong> — Defects cluster. Components with many known errors statistically contain more. Focus testing effort there.</li>
+<li><strong>Testing shows existence, not absence</strong> — Dijkstra: passing all tests does not prove the system is error-free, only that tested cases passed.</li>
+<li><strong>Testing cannot prove correctness</strong> — Sufficient testing cannot show a program is completely free of errors.</li>
+</ul>
+<div class="callout"><callout-label>Architect's Implication</callout-label>Design for testability. Build in observability (structured logging, metrics, distributed tracing). Expect failures at runtime — they cannot be fully prevented through testing alone.</div>
 </div>
 </div>
 
@@ -799,7 +842,7 @@ details .details-body{padding:.8rem .7rem .5rem;font-size:.88rem}
 </div>
 
 <!-- ====== LECTURE 11 ====== -->
-<div class="lecture" id="lec11" data-search="iterative incremental architecture views arc42 context building block runtime deployment top-down bottom-up">
+<div class="lecture" id="lec11" data-search="iterative incremental architecture views arc42 context building block runtime deployment top-down bottom-up domain driven design DDD business context technical context view-based">
 <span class="lecture-tag">Lectures 40 – 42</span>
 <h2>Architecture Development &amp; Views</h2>
 <p class="lecture-subtitle">Iterative design, arc42 views, top-down vs. bottom-up</p>
@@ -832,11 +875,34 @@ details .details-body{padding:.8rem .7rem .5rem;font-size:.88rem}
 <tr><td>Feedback</td><td>Late</td><td>Early (incremental testing)</td></tr>
 </table></div>
 <p>Both can be combined: start bottom-up for ambiguous parts, then apply top-down for the rest.</p>
+<div class="section">
+<h3>Architecture Development Approaches</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Approach</th><th>Key Idea</th><th>When Used</th></tr>
+<tr><td><strong>Top-Down</strong></td><td>Start with whole system vision; decompose hierarchically</td><td>Large systems with clear scope</td></tr>
+<tr><td><strong>Bottom-Up</strong></td><td>Build individual components first; assemble upward</td><td>R&amp;D-heavy, reuse-driven work</td></tr>
+<tr><td><strong>Iterative &amp; Incremental</strong></td><td>Refine decisions and extend solution in small increments</td><td>Agile, evolving requirements</td></tr>
+<tr><td><strong>View-Based Development</strong></td><td>Design and document using multiple complementary views (context, building block, runtime, deployment)</td><td>Most common in practice</td></tr>
+<tr><td><strong>Domain Driven Design (DDD)</strong></td><td>Align software structure with the business domain. Bounded Contexts partition the model. Ubiquitous language shared between developers and domain experts.</td><td>Complex domains, microservices</td></tr>
+</table></div>
+</div>
+
+<div class="section">
+<h3>Business Context vs. Technical Context</h3>
+<p>The Context View can be represented in two complementary sub-views:</p>
+<div class="tbl-wrap"><table>
+<tr><th>Aspect</th><th>Business (Functional) Context</th><th>Technical Context</th></tr>
+<tr><td>Focus</td><td>System's role in business processes; actors, inputs, outputs, external systems</td><td>Physical channels, protocols, network interfaces between system and its environment</td></tr>
+<tr><td>Technology?</td><td>Technology-neutral; any notation</td><td>Technology-specific; shows protocols, message formats, infrastructure boundaries</td></tr>
+<tr><td>Audience</td><td>Business stakeholders, product owners</td><td>Developers, infrastructure, ops teams</td></tr>
+<tr><td>Content</td><td>Who uses the system and why; roles of external systems</td><td>Physical communication paths; channel types (REST, messaging, file transfer)</td></tr>
+</table></div>
+<div class="callout"><callout-label>Key Rule</callout-label>The technical context contains the physical channels between your system and its environment — NOT the internal deployment structure. That belongs in the Deployment View.</div>
 </div>
 </div>
 
 <!-- ====== LECTURE 12 ====== -->
-<div class="lecture" id="lec12" data-search="documentation communication arc42 template ADR architecture decision records UML diagrams best practices">
+<div class="lecture" id="lec12" data-search="documentation communication arc42 template ADR architecture decision records UML diagrams best practices structural behavioral sequence activity class component package deployment BPMN">
 <span class="lecture-tag">Lectures 43 – 48</span>
 <h2>Documentation &amp; Evaluation</h2>
 <p class="lecture-subtitle">Templates, ADRs, diagrams, metrics, ATAM</p>
@@ -903,6 +969,23 @@ details .details-body{padding:.8rem .7rem .5rem;font-size:.88rem}
 </div>
 
 <div class="section">
+<h3>UML Diagram Types</h3>
+<div class="tbl-wrap"><table>
+<tr><th>Category</th><th>Diagram Types</th><th>Use in Architecture</th></tr>
+<tr><td><strong>Structural (Static)</strong><br><em>Show what the system IS</em></td><td>Class, Component, Package, Deployment, Object</td><td>Building block view; deployment view; static decomposition</td></tr>
+<tr><td><strong>Behavioral (Dynamic)</strong><br><em>Show how the system BEHAVES</em></td><td>Activity, Sequence, State Machine, Use Case, Communication</td><td>Runtime view; interaction flows; process behavior</td></tr>
+</table></div>
+<h4>Key Diagrams per Architectural View</h4>
+<ul>
+<li><strong>Building Block View</strong> — Component diagram, Package diagram, Class diagram</li>
+<li><strong>Runtime View</strong> — Sequence diagram, Activity diagram, State machine</li>
+<li><strong>Deployment View</strong> — Deployment diagram</li>
+<li><strong>Runtime workflows</strong> — Flowcharts, Activity diagrams, numbered sequential steps, Sequence diagrams</li>
+</ul>
+<div class="callout"><callout-label>BPMN</callout-label><strong>Business Process Model &amp; Notation (BPMN)</strong> is an alternative notation that can also be used for architecture documentation — not exclusive to business analysts. It is well-suited for documenting process flows and is readable by both technical and non-technical stakeholders. UML deployment diagrams are one way (not the only way) to document infrastructure mapping.</div>
+</div>
+
+<div class="section">
 <h3>ATAM — Architecture Trade-off Analysis Method</h3>
 <p>Leading qualitative evaluation method (Carnegie Mellon SEI). Three focuses: early risk identification, making correct trade-offs, identifying sensitivity points.</p>
 <p>Process: business drivers → quality attributes → scenarios → utility tree (prioritized) → architect presents → trade-off analysis → sensitivity points → risk themes feed back.</p>
@@ -923,7 +1006,7 @@ details .details-body{padding:.8rem .7rem .5rem;font-size:.88rem}
 </details>
 </div>
 
-</div><!-- /content -->
+</div></div></div><!-- /content -->
 
 <!-- ===== FLASHCARDS PAGE ===== -->
 <div id="page-flashcards" class="content" style="max-width:860px;margin:0 auto;padding:2.5rem 2rem 6rem">
@@ -952,6 +1035,10 @@ function fc(h){const b=h.nextElementSibling;const a=h.querySelector('.fc-arrow')
 <div class="fc r-am"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">Conflict</span><span class="fc-title">Project Goals vs. Architecture Goals</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g3"><div class="fc-box"><div class="fc-box-label">Project (now)</div><div class="fc-box-text">Ship features. Hit deadline. Stay on budget.</div></div><div class="fc-box"><div class="fc-box-label">Architecture (forever)</div><div class="fc-box-text">Maintainable. Flexible. Understandable.</div></div><div class="fc-box"><div class="fc-box-label">Architect's job</div><div class="fc-box-text">Negotiate the tradeoff. Both extremes are dangerous.</div></div></div><div class="fc-hook">🏃 Sprint vs. marathon. Don't wear marathon shoes to a sprint — but don't sprint a marathon either.</div></div></div>
 
 <div class="fc r-bl"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">Meta-Principle</span><span class="fc-title">Know when to break the rules</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g2"><div class="fc-box"><div class="fc-box-label">Principles are...</div><div class="fc-box-text">Tools, not laws. They can contradict each other.</div></div><div class="fc-box"><div class="fc-box-label">Your job is to...</div><div class="fc-box-text">Know the rules well enough to break them wisely.</div></div></div><div class="fc-hook">🔨 A hammer is great — but don't use it to screw in a lightbulb. Context governs everything.</div></div></div>
+
+<div class="fc r-gy"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">Standard ⭐</span><span class="fc-title">ISO/IEC/IEEE 42010 — Architecture Defined</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-box" style="margin-bottom:10px;font-style:italic;font-size:13px">"The fundamental concepts or properties of a system in its environment, embodied in its elements, relationships, and the principles of its design and evolution."</div><div class="fc-grid fc-g3"><div class="fc-box"><div class="fc-box-label">Elements</div><div class="fc-box-text">Components / building blocks at all levels of decomposition</div></div><div class="fc-box"><div class="fc-box-label">Relationships</div><div class="fc-box-text">Interfaces, dependencies, interactions between elements</div></div><div class="fc-box"><div class="fc-box-label">Principles</div><div class="fc-box-text">Rules and guidelines governing design and evolution</div></div></div><div class="fc-hook">📜 ISO 42010 is the global passport of software architecture — one official definition that crosses language, industry, and system-type borders.</div></div></div>
+
+<div class="fc r-gy"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">Taxonomy</span><span class="fc-title">Software System Categories</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g3"><div class="fc-box"><div class="fc-box-label">Batch</div><div class="fc-box-text">Processes large datasets without user interaction. Scheduled or triggered. No real-time requirement.</div></div><div class="fc-box"><div class="fc-box-label">Interactive Online</div><div class="fc-box-text">Real-time user interaction. UI-driven. Response-time critical. Web, mobile, e-commerce.</div></div><div class="fc-box"><div class="fc-box-label">Embedded Real-Time</div><div class="fc-box-text">Hardware-integrated. Strict timing constraints. Resource-constrained. Car ECUs, medical devices, sensors.</div></div></div><div class="fc-hook">🏷️ Know your system type before designing. A car ECU and an e-commerce site have completely different architectural constraints.</div></div></div>
 </div>
 
 <!-- ── DECK 2: 7 Tasks ── -->
@@ -1008,6 +1095,8 @@ function fc(h){const b=h.nextElementSibling;const a=h.querySelector('.fc-arrow')
 <div class="fc r-gr"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">§76–78</span><span class="fc-title">KISS · YAGNI · DRY</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g3"><div class="fc-box"><div class="fc-box-label">KISS</div><div class="fc-box-text">Simple = easier to understand, maintain, modify. Don't add flexibility speculatively.</div></div><div class="fc-box"><div class="fc-box-label">YAGNI</div><div class="fc-box-text">Don't build features before they're needed. Unused code is still complexity to maintain.</div></div><div class="fc-box"><div class="fc-box-label">DRY</div><div class="fc-box-text">Every piece of knowledge: one source of truth. Duplication = divergence risk.</div></div></div><div class="fc-hook">✂️ Three ways to say the same thing: don't over-engineer, don't pre-engineer, don't re-engineer.</div></div></div>
 
 <div class="fc r-re"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">§83–87 ⭐</span><span class="fc-title">SOLID principles</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g5"><div class="fc-box"><div class="fc-box-label">S — SRP</div><div class="fc-box-text">One component, one responsibility. One reason to change.</div></div><div class="fc-box"><div class="fc-box-label">O — OCP</div><div class="fc-box-text">Open for extension. Closed for modification. Add, don't edit.</div></div><div class="fc-box"><div class="fc-box-label">L — LSP</div><div class="fc-box-text">Subclass must fully honour the parent's contract. No surprises.</div></div><div class="fc-box"><div class="fc-box-label">I — ISP</div><div class="fc-box-text">Many small interfaces &gt; one fat one. No unused methods on clients.</div></div><div class="fc-box"><div class="fc-box-label">D — DIP</div><div class="fc-box-text">Both high- and low-level modules depend on abstractions, not each other.</div></div></div><div class="fc-hook">🏛️ SOLID = the five pillars. Remove one and the whole building gets wobbly.</div></div></div>
+
+<div class="fc r-gy"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">Testing</span><span class="fc-title">Testing Principles — what testing can and cannot do</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g2"><div class="fc-box"><div class="fc-box-label">Can't find all errors</div><div class="fc-box-text">Complete exhaustive testing is infeasible for any non-trivial system.</div></div><div class="fc-box"><div class="fc-box-label">Error clustering</div><div class="fc-box-text">Bugs attract bugs. Components with many known errors statistically contain more hidden ones.</div></div></div><div class="fc-grid fc-g2" style="margin-top:0"><div class="fc-box"><div class="fc-box-label">Shows existence, not absence</div><div class="fc-box-text">Dijkstra: "Testing can show the presence of bugs, never their absence." Passing tests ≠ no bugs.</div></div><div class="fc-box"><div class="fc-box-label">Architect implication</div><div class="fc-box-text">Design for testability. Build in observability: structured logging, metrics, distributed tracing.</div></div></div><div class="fc-hook">🔎 You can prove a program has a bug. You can never prove it has none. Design for that reality from the start.</div></div></div>
 </div>
 
 <!-- ── DECK 5: Architecture Patterns ── -->
@@ -1048,6 +1137,10 @@ function fc(h){const b=h.nextElementSibling;const a=h.querySelector('.fc-arrow')
 <div class="fc r-re"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">§62 ⭐</span><span class="fc-title">Risk severity formula</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-box r-re" style="font-size:14px;font-weight:500;text-align:center;margin-bottom:10px">Risk Severity = Probability × Amount of Harm</div><div class="fc-grid fc-g2"><div class="fc-box"><div class="fc-box-label">Low risk example</div><div class="fc-box-text">All data centres fail simultaneously — $1M/day damage but probability near zero → low priority</div></div><div class="fc-box"><div class="fc-box-label">High risk example</div><div class="fc-box-text">Security breach — 5% probability × $100K/day harm → must be addressed now</div></div></div><div class="fc-hook">🔥 A small fire that's likely beats a catastrophe that's rare. Multiply before you prioritise.</div></div></div>
 
 <div class="fc r-co"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">§63</span><span class="fc-title">Common risk categories</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g3"><div class="fc-box"><div class="fc-box-label">Schedule &amp; scope</div><div class="fc-box-text">Tight deadlines → technical debt. No MVP defined → scope creep.</div></div><div class="fc-box"><div class="fc-box-label">Requirements</div><div class="fc-box-text">Ambiguous, unprioritised, or constantly changing requirements.</div></div><div class="fc-box"><div class="fc-box-label">Documentation</div><div class="fc-box-text">Absent docs → days to understand a module. Underrated and very costly.</div></div></div><div class="fc-grid fc-g3" style="margin-top:0"><div class="fc-box"><div class="fc-box-label">Infrastructure</div><div class="fc-box-text">Underestimated resource needs → DB crashes at peak load.</div></div><div class="fc-box"><div class="fc-box-label">Technology</div><div class="fc-box-text">Unproven tools → reliability unknowns in production.</div></div><div class="fc-box"><div class="fc-box-label">External interfaces</div><div class="fc-box-text">3rd-party API changes late → major rework of arch and tests.</div></div></div><div class="fc-hook">🕵️ Every category has one thing in common: they were all predictable. Identify them early.</div></div></div>
+
+<div class="fc r-gy"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">Standard ⭐</span><span class="fc-title">ISO/IEC 25010 — 8 Quality Characteristics</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g4"><div class="fc-box"><div class="fc-box-label">Functional Suitability</div><div class="fc-box-text">Does what it's supposed to do — completely and correctly</div></div><div class="fc-box"><div class="fc-box-label">Performance Efficiency</div><div class="fc-box-text">Speed &amp; resource usage under defined conditions</div></div><div class="fc-box"><div class="fc-box-label">Compatibility</div><div class="fc-box-text">Co-existence and interoperability with other systems</div></div><div class="fc-box"><div class="fc-box-label">Usability</div><div class="fc-box-text">Learnability, operability, user error protection</div></div></div><div class="fc-grid fc-g4" style="margin-top:0"><div class="fc-box"><div class="fc-box-label">Reliability</div><div class="fc-box-text">Availability, fault tolerance, recoverability</div></div><div class="fc-box"><div class="fc-box-label">Security</div><div class="fc-box-text">Confidentiality, integrity, non-repudiation, authenticity</div></div><div class="fc-box"><div class="fc-box-label">Maintainability</div><div class="fc-box-text">Modularity, testability, modifiability, analyzability</div></div><div class="fc-box"><div class="fc-box-label">Portability</div><div class="fc-box-text">Adaptability, installability, replaceability</div></div></div><div class="fc-hook">🏆 ISO 25010 = the quality menu. Use it as your starting point for quality trees — not every dish suits every system.</div></div></div>
+
+<div class="fc r-gy"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">ATAM ⭐</span><span class="fc-title">Quality Tree — from abstract goals to measurable scenarios</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g4"><div class="fc-box"><div class="fc-box-label">Root</div><div class="fc-box-text">"Quality" — the overarching goal</div></div><div class="fc-box"><div class="fc-box-label">Level 1</div><div class="fc-box-text">ISO 25010 characteristics: Performance, Reliability, Security…</div></div><div class="fc-box"><div class="fc-box-label">Level 2</div><div class="fc-box-text">System-specific quality attributes: "Response time under peak load"</div></div><div class="fc-box"><div class="fc-box-label">Leaves</div><div class="fc-box-text">Concrete quality scenarios tagged H / M / L by stakeholders. Drive ATAM trade-off analysis.</div></div></div><div class="fc-hook">🌳 A quality tree turns "we want good performance" into "API ≤ 200ms at 1000 req/s — HIGH." That's something you can evaluate and trade off.</div></div></div>
 </div>
 
 <!-- ── DECK 8: Design Strategies ── -->
@@ -1082,6 +1175,10 @@ function fc(h){const b=h.nextElementSibling;const a=h.querySelector('.fc-arrow')
 <div class="fc r-am"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">§127 ⭐</span><span class="fc-title">The 4 arc42 architectural views</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g4"><div class="fc-box" style="background:#EEEDFE"><div class="fc-box-label" style="color:#534AB7">Context view</div><div class="fc-box-text" style="color:#26215C">System as black box. External actors, interfaces, interactions. Entry point for all stakeholders.<br><br>Audience: everyone · Diagrams: any notation</div></div><div class="fc-box" style="background:#E1F5EE"><div class="fc-box-label" style="color:#0F6E56">Building block view</div><div class="fc-box-text" style="color:#04342C">Static structure. Components, interfaces, dependencies. Hierarchical decomposition.<br><br>Audience: devs, PM · Diagrams: UML class, package, component</div></div><div class="fc-box" style="background:#FAEEDA"><div class="fc-box-label" style="color:#854F0B">Runtime view</div><div class="fc-box-text" style="color:#412402">Dynamic behaviour. How components interact at runtime. Processes, threads, lifecycle.<br><br>Audience: devs, testers, ops · Diagrams: UML sequence, activity, state</div></div><div class="fc-box" style="background:#E6F1FB"><div class="fc-box-label" style="color:#185FA5">Deployment view</div><div class="fc-box-text" style="color:#042C53">Infrastructure topology. Nodes, channels, artefacts. Spot bottlenecks, costs, risks.<br><br>Audience: ops, architects · Diagrams: UML deployment</div></div></div><div class="fc-hook">🗺️ One system, four maps. Each map is drawn for a different traveller — but they all describe the same city.</div></div></div>
 
 <div class="fc r-co"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">§128 ⭐</span><span class="fc-title">Top-down vs. bottom-up design</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g2"><div class="fc-box"><div class="fc-box-label">Top-down</div><div class="fc-box-text">Start with whole system vision → decompose hierarchically.<br><br>Pro: big picture first, clear responsibilities<br>Con: late integration pain, may miss existing solutions<br><br>Best for: large systems with clear scope</div></div><div class="fc-box"><div class="fc-box-label">Bottom-up</div><div class="fc-box-text">Start with individual components → assemble upward.<br><br>Pro: reuse, incremental testing, easier integration<br>Con: architectural inconsistency, user needs deprioritised<br><br>Best for: R&amp;D-heavy or innovative components</div></div></div><div class="fc-box r-co" style="margin-bottom:10px"><div class="fc-box-label">Combined — the smart default</div><div class="fc-box-text">Start bottom-up for ambiguous parts. Switch to top-down once they're understood.</div></div><div class="fc-hook">🏔️ Plan the expedition from basecamp (top-down). Explore the terrain before committing to a route (bottom-up). Best expeditions do both.</div></div></div>
+
+<div class="fc r-gy"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">Approaches</span><span class="fc-title">Architecture Development Approaches — incl. DDD</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g3"><div class="fc-box"><div class="fc-box-label">View-Based (most common)</div><div class="fc-box-text">Design and document using multiple complementary views: context, building block, runtime, deployment.</div></div><div class="fc-box"><div class="fc-box-label">Domain Driven Design (DDD)</div><div class="fc-box-text">Align software structure with the business domain. Bounded Contexts partition the model. Ubiquitous language shared by devs and domain experts. Natural fit for microservices.</div></div><div class="fc-box"><div class="fc-box-label">Iterative &amp; Incremental</div><div class="fc-box-text">Refine decisions across iterations. Extend the architecture in small focused increments. Most agile projects use this combined with view-based.</div></div></div><div class="fc-hook">🗺️ Most real projects combine view-based + iterative. DDD adds the insight: let the business domain drive the structure, not the technology stack.</div></div></div>
+
+<div class="fc r-gy"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">Context View ⭐</span><span class="fc-title">Business Context vs. Technical Context</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g2"><div class="fc-box"><div class="fc-box-label">Business (Functional) Context</div><div class="fc-box-text">Shows system's role in business processes. Technology-neutral. Actors, inputs, outputs, external systems. Audience: business stakeholders, POs.</div></div><div class="fc-box"><div class="fc-box-label">Technical Context</div><div class="fc-box-text">Shows physical channels, protocols, and network interfaces between the system and its environment. Technology-specific. NOT internal deployment. Audience: devs, ops.</div></div></div><div class="fc-hook">🌐 Same system, two lenses. Business asks "who uses it and why?" — Technical asks "how does it communicate with the outside world?"</div></div></div>
 </div>
 
 <!-- ── DECK 11: Documentation & Evaluation ── -->
@@ -1098,6 +1195,20 @@ function fc(h){const b=h.nextElementSibling;const a=h.querySelector('.fc-arrow')
 <div class="fc r-re"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">§128 ⭐</span><span class="fc-title">Key metrics &amp; Goodhart's Law</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g3"><div class="fc-box"><div class="fc-box-label">Coupling metrics</div><div class="fc-box-text">Afferent Ca = incoming deps · Efferent Ce = outgoing deps · Instability I = Ce ÷ (Ca + Ce) · I=0: stable · I=1: unstable</div></div><div class="fc-box"><div class="fc-box-label">Code metrics</div><div class="fc-box-text">LOC (rough complexity) · Cyclomatic complexity (# of paths = # of tests needed)</div></div><div class="fc-box"><div class="fc-box-label">Runtime metrics</div><div class="fc-box-text">MTBF, MTTR, uptime, error rate, latency, throughput</div></div></div><div class="fc-box r-re" style="margin-bottom:10px"><div class="fc-box-label">Goodhart's Law</div><div class="fc-box-text">"When a measure becomes a target, it ceases to be a good measure." Use metrics as diagnostic signals — never as mandatory targets. Mandated 98% test coverage → devs write meaningless tests.</div></div><div class="fc-hook">⚠️ Metrics are torches, not trophies. Use them to find problems — don't frame them on the wall.</div></div></div>
 
 <div class="fc r-pi"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">§135 ⭐</span><span class="fc-title">ATAM — Architecture Trade-off Analysis Method</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g3"><div class="fc-box"><div class="fc-box-label">What it is</div><div class="fc-box-text">Leading qualitative evaluation method. Carnegie Mellon SEI. Uses scenarios to evaluate if architecture fulfils quality goals.</div></div><div class="fc-box"><div class="fc-box-label">3 focuses</div><div class="fc-box-text">Early risk identification · Making right trade-offs when goals conflict · Finding sensitivity points</div></div><div class="fc-box"><div class="fc-box-label">Process flow</div><div class="fc-box-text">Business drivers → scenarios → utility tree → architect presents → trade-offs → sensitivity points → risk themes</div></div></div><div class="fc-hook">⚖️ ATAM is not a rubber stamp — it's a structured argument about whether the architecture can actually survive the real world.</div></div></div>
+
+<div class="fc r-gy"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">UML ⭐</span><span class="fc-title">UML Diagram Types — Structural vs. Behavioral</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g2"><div class="fc-box"><div class="fc-box-label">Structural (Static) — show what the system IS</div><div class="fc-box-text">• Class diagram — entity relationships<br>• Component diagram — building blocks<br>• Package diagram — groupings &amp; namespaces<br>• Deployment diagram — infrastructure topology<br>• Object diagram — instance snapshot</div></div><div class="fc-box"><div class="fc-box-label">Behavioral (Dynamic) — show how it BEHAVES</div><div class="fc-box-text">• Sequence diagram — message order over time<br>• Activity diagram — workflow / process flow<br>• State machine — lifecycle / state transitions<br>• Use case diagram — actors &amp; system interactions<br>• Communication diagram — object collaboration</div></div></div><div class="fc-box" style="margin-bottom:10px"><div class="fc-box-label">BPMN — alternative notation</div><div class="fc-box-text">Business Process Model &amp; Notation. Usable in architecture docs, not just by business analysts. Readable by both technical and non-technical stakeholders. Well-suited for process flows.</div></div><div class="fc-hook">📐 Structural = floor plan (where things are). Behavioral = instruction manual (how things move). Most architecture views need both.</div></div></div>
+</div>
+
+<!-- ── DECK 12: Cross-Cutting Concerns & Interfaces ── -->
+<div class="fc-deck">
+<div class="fc-deck-title">Cross-Cutting Concerns &amp; Interfaces</div>
+<div class="fc-deck-sub">Lectures 25–28 · §102–§112</div>
+
+<div class="fc r-gy"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">§102 ⭐</span><span class="fc-title">Cross-Cutting Concerns — what they are &amp; why they matter</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g3"><div class="fc-box"><div class="fc-box-label">What they are</div><div class="fc-box-text">Aspects that affect multiple components simultaneously: persistence, error handling, security, logging, i18n, UI/UX, communication, business rules.</div></div><div class="fc-box"><div class="fc-box-label">The problem</div><div class="fc-box-text">Without a unified concept: DRY violations, inconsistent behavior, reduced conceptual integrity, high change cost across the system.</div></div><div class="fc-box"><div class="fc-box-label">The solution</div><div class="fc-box-text">Define cross-cutting concepts centrally. Document in arc42 chapter 8. Use AOP, annotations, or frameworks to apply consistently.</div></div></div><div class="fc-hook">🕸️ Cross-cutting concerns are the glue — ignore them and every component will handle error logging differently. Ten components, ten formats. Good luck debugging.</div></div></div>
+
+<div class="fc r-gy"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">§107 ⭐</span><span class="fc-title">Provided · Required · Third-Party Interfaces</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g3"><div class="fc-box"><div class="fc-box-label">Provided (API)</div><div class="fc-box-text">Provider defines and owns it. Consumer depends on provider. Standard dependency direction.</div></div><div class="fc-box"><div class="fc-box-label">Required (SPI)</div><div class="fc-box-text">Consumer defines and owns it. Provider must conform. Dependency is inverted — consumer is in control.</div></div><div class="fc-box"><div class="fc-box-label">Third-Party / Standard</div><div class="fc-box-text">A third party (standards body or library vendor) defines it. Both consumer and provider must conform. Neither owns it.</div></div></div><div class="fc-hook">🔌 Provided = you plug into my socket. Required = I specify the socket, you build it. Standard = the IEC decides the socket shape, we both comply.</div></div></div>
+
+<div class="fc r-gy"><div class="fc-header" onclick="fc(this)"><div class="fc-left"><span class="fc-tag">§109</span><span class="fc-title">Interface Design — key guidelines</span></div><span class="fc-arrow">▶</span></div><div class="fc-body"><div class="fc-grid fc-g3"><div class="fc-box"><div class="fc-box-label">Easy to learn, hard to misuse</div><div class="fc-box-text">Self-descriptive names. Minimal surprises. Atomic information units — no blob parsing.</div></div><div class="fc-box"><div class="fc-box-label">Functionally complete</div><div class="fc-box-text">Complete from the perspective of users and consumers — don't omit necessary operations.</div></div><div class="fc-box"><div class="fc-box-label">Document everything</div><div class="fc-box-text">Functional behavior + error behavior + quality attributes. Not just the happy path. Include units for numeric quantities.</div></div></div><div class="fc-grid fc-g2" style="margin-top:0"><div class="fc-box"><div class="fc-box-label">Local vs remote — not identical</div><div class="fc-box-text">Local calls and remote calls have fundamentally different failure modes, latency, and serialization needs. Do NOT design them as if they're the same.</div></div><div class="fc-box"><div class="fc-box-label">REST vs RPC</div><div class="fc-box-text">REST: fixed operations (CRUD) on URI-identified resources. RPC: arbitrary domain operations. REST = lower complexity; RPC = more expressive.</div></div></div><div class="fc-hook">🎯 Try using your own interface before shipping it. If you can't figure out how to call it, neither can the consumer.</div></div></div>
 </div>
 
 </div><!-- /page-flashcards -->
@@ -1162,37 +1273,60 @@ window.addEventListener('scroll',()=>{
   document.getElementById('btt').classList.toggle('show',st>400);
 });
 
-// Page switching
+// Page switching - FIXED VERSION
 function showPage(page){
   const notes=document.getElementById('content');
   const cards=document.getElementById('page-flashcards');
   const nav=document.getElementById('nav');
+  const topbar=document.querySelector('.topbar');
+  const progressEl=document.querySelector('.progress');
   const tabN=document.getElementById('tab-notes');
   const tabF=document.getElementById('tab-flashcards');
-  if(page==='flashcards'){
-    notes.style.display='none';
-    cards.style.display='block';
-    nav.style.display='none';
+
+  // hide all content
+  if(notes) notes.style.display='none';
+  if(cards) cards.style.display='none';
+  if(nav) nav.style.display='none';
+  const search = document.getElementById('search');
+  if(search) search.style.display='none';
+
+  // remove active from all tabs
+  if(tabN) tabN.classList.remove('active');
+  if(tabF) tabF.classList.remove('active');
+
+  if(page==='notes'){
+    if(notes) notes.style.display='block';
+    if(nav) nav.style.display='block';
+    if(search) search.style.display='block';
+    if(tabN) tabN.classList.add('active');
+    const wide=window.innerWidth>900;
+    document.querySelector('.main').style.marginLeft=wide?'var(--nav-w)':'';
+    topbar.style.left=wide?'var(--nav-w)':'0';
+    progressEl.style.left=wide?'var(--nav-w)':'0';
+  } else if(page==='flashcards'){
+    if(cards) cards.style.display='block';
+    if(tabF) tabF.classList.add('active');
     document.querySelector('.main').style.marginLeft='0';
-    tabF.classList.add('active');tabN.classList.remove('active');
-    document.getElementById('search').style.display='none';
-  } else {
-    notes.style.display='';
-    cards.style.display='none';
-    nav.style.display='';
-    document.querySelector('.main').style.marginLeft='';
-    tabN.classList.add('active');tabF.classList.remove('active');
-    document.getElementById('search').style.display='';
-    if(window.innerWidth>900){document.querySelector('.main').style.marginLeft='var(--nav-w)'}
+    topbar.style.left='0';
+    progressEl.style.left='0';
   }
   window.scrollTo(0,0);
 }
-// Restore nav margin on resize
+
+
 window.addEventListener('resize',()=>{
-  if(document.getElementById('tab-notes').classList.contains('active')&&window.innerWidth>900){
+  const onNotes=document.getElementById('tab-notes').classList.contains('active');
+  if(onNotes&&window.innerWidth>900){
     document.querySelector('.main').style.marginLeft='var(--nav-w)';
+    document.querySelector('.topbar').style.left='var(--nav-w)';
+    document.querySelector('.progress').style.left='var(--nav-w)';
+  } else if(onNotes){
+    document.querySelector('.main').style.marginLeft='';
+    document.querySelector('.topbar').style.left='0';
+    document.querySelector('.progress').style.left='0';
   }
 });
+
 function filterSections(q){
   q=q.toLowerCase().trim();
   document.querySelectorAll('.lecture').forEach(lec=>{
